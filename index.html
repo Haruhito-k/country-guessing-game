@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+body { background: #000; color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; overflow: hidden; font-family: sans-serif; }
+#waku { position: relative; width: 800px; height: 500px; border: 4px solid #f80; overflow: hidden; background: #222; }
+#map { position: absolute; width: 3000px; will-change: transform; left: 50%; top: 50%; }
+#target-name { font-size: 24px; color: #f80; margin-bottom: 10px; font-weight: bold; }
+#error-msg { color: red; font-size: 14px; position: absolute; bottom: 10px; }
+input { font-size: 30px; margin-top: 20px; padding: 10px; text-align: center; z-index: 10; border: 2px solid #f80; background: #000; color: #fff; }
+</style>
+</head>
+<body>
+
+<div id="target-name">ターゲット捕捉中...</div>
+<div id="waku">
+<img id="map" src="" onerror="document.getElementById('error-msg').innerText = 'エラー：' + this.src + ' が見つかりません。'">
+<div id="error-msg"></div>
+</div>
+<input type="text" id="box" placeholder="国名を入力">
+
+<script>
+var m = document.getElementById('map');
+var b = document.getElementById('box');
+var tText = document.getElementById('target-name');
+var err = document.getElementById('error-msg');
+
+var s = 0.8;
+var current;
+
+// ★ここにある「file」の名前が、実際のファイル名と1文字でも違うと真っ暗になります
+var countries = [
+{ name: "アイスランド", x: 40, y: 11, file: "iceland_map.png" },
+{ name: "アイルランド", x: 43, y: 19, file: "ireland_map.png" },
+{ name: "アゼルバイジャン", x: 59, y: 29, file: "azerbaijan_map.png" },
+{ name: "アフガニスタン", x: 65, y: 33, file: "afghanistan_map.png" },
+{ name: "アラブ首長国連邦", x: 62, y: 41, file: "united arab emirates_map.png" },
+{ name: "アルジェリア", x: 46, y: 38, file: "algeria_map.png" },
+{ name: "アルゼンチン", x: 25, y: 86, file: "algentina_map.png" },
+{ name: "アルバニア", x: 50, y: 27, file: "albania_map.png" },
+{ name: "アルメニア", x: 58, y: 28, file: "armenia_map.png" },
+{ name: "アンゴラ", x: 50, y: 68, file: "angola_map.png" },
+{ name: "イエメン", x: 60, y: 47, file: "yemen_map.png" },
+{ name: "イタリア", x: 50, y: 26, file: "italy_map.png" },
+{ name: "イラク", x: 58, y: 34, file: "iraq_map.png" },
+{ name: "イラン", x: 61, y: 35, file: "iran_map.png" },
+{ name: "インド", x: 70, y: 42, file: "india_map.png" },
+{ name: "インドネシア", x: 82, y: 58, file: "indonesia_map.png" },
+{ name: "ウガンダ", x: 55, y: 58, file: "uganda_map.png" },
+{ name: "ウクライナ", x: 54, y: , file: "ukraine_map.png" },
+{ name: "ウズベキスタン", x: , y: , file: "uzbekistan_map.png" },
+{ name: "ウルグアイ", x: , y: , file: "uruguay_map.png" },
+{ name: "イギリス", x: , y: , file: "united kingdom_map.png" },
+{ name: "エクアドル", x: 20, y: 60, file: "ecuador_map.png" },
+{ name: "エジプト", x: 54, y: 38, file: "egypt_map.png" },
+{ name: "エストニア", x: 52, y: 15, file: "estonia_map.png" },
+{ name: "エスワティニ", x: , y: , file: "eswatini_map.png" },
+{ name: "エチオピア", x: , y: , file: "ethiopia_map.png" },
+{ name: "エリトリア", x: 57, y: 47, file: "eritrea_map.png" },
+{ name: "エルサルバドル", x: 17, y: 48, file: "el salvador_map.png" },
+{ name: "オーストラリア", x: , y: , file: "australia_map.png" },
+{ name: "オーストリア", x: 49, y: 23, file: "austria_map.png" },
+{ name: "オマーン", x: , y: , file: "_map.png" },
+{ name: "オランダ", x: , y: , file: "_map.png" },
+{ name: "カザフスタン", x: , y: , file: "_map.png" },
+{ name: "カタール", x: , y: , file: "_map.png" },
+{ name: "カナダ", x: , y: , file: "_map.png" },
+{ name: "カメルーン", x: 49, y: 55, file: "cameroon_map.png" },
+{ name: "カンボジア", x: 78, y: 49, file: "cambodia_map.png" },
+{ name: "ガーナ", x: , y: , file: "ghana_map.png" },
+{ name: "ガイアナ", x: , y: , file: "guyana_map.png" },
+{ name: "ガボン", x: , y: , file: "gabon_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "北朝鮮", x: 82, y: 28, file: "dem. rep. korea_map.png" },
+
+
+{ name: "バングラデシュ", x: 73, y: 40, file: "bangladesh_map.png" },
+{ name: "ベラルーシ", x: 53, y: 18, file: "belarus_map.png" },
+{ name: "ベルギー", x: 46, y: 21, file: "belgium_map.png" },
+{ name: "ベリーズ", x: 17, y: 45, file: "belize_map.png" },
+{ name: "ベナン", x: 46, y: 51, file: "benin_map.png" },
+{ name: "ブータン", x: 73, y: 38, file: "bhutan_map.png" },
+{ name: "ボリビア", x: 24, y: 71, file: "bolivia_map.png" },
+{ name: "ボスニア・ヘルツェゴヴィナ", x: 50, y: 25, file: "bosnia and herzegovina_map.png" },
+{ name: "ボツワナ", x: 52, y: 76, file: "botswana_map.png" },
+{ name: "ブラジル", x: 28, y: 67, file: "brazil_map.png" },
+{ name: "ブルネイ・ダルサラーム", x: 82, y: 55, file: "brunei darussaalam_map.png" },
+{ name: "ブルガリア", x: 52, y: 27, file: "blgaria_map.png" },
+{ name: "ブルキナ・ファソ", x: 44, y: 49, file: "burkina faso_map.png" },
+{ name: "ブルンジ", x: 55, y: 61, file: "burundi_map.png" },
+{ name: "中央アフリカ共和国", x: 51, y: 53, file: "central african republic_map.png" },
+{ name: "チャド", x: 51, y: 47, file: "chad_map.png" },
+{ name: "コロンビア", x: 21, y: 55, file: "colombia_map.png" },
+{ name: "コスタリカ", x: 18, y: 51, file: "costa rica_map.png" },
+{ name: "クロアチア", x: 50, y: 24, file: "croatia_map.png" },
+{ name: "キューバ", x: 20, y: 42, file: "cuba_map.png" },
+{ name: "チェコ", x: 49, y: 22, file: "czech republic_map.png" },
+{ name: "コートジボワール", x: 43, y: 53, file: "côte d'ivoire_map.png" },
+{ name: "コンゴ民主共和国", x: 52, y: 61, file: "democratic republic of the congo_map.png" },
+{ name: "ジブチ", x: 59, y: 49, file: "djibouti_map.png" },
+{ name: "ドミニカ共和国", x: 23, y: 44, file: "dominican republic_map.png" },
+{ name: "エルサルバドル", x: 17, y: 48, file: "el salvador_map.png" },
+{ name: "赤道ギニア", x: 48, y: 57, file: "equatorial guinea_map.png" },
+{ name: "フィンランド", x: , y: , file: "finland_map.png" },
+{ name: "ジョージア", x: , y: , file: "georgia_map.png" },
+{ name: "ドイツ", x: , y: , file: "germany_map.png" },
+
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "", x: , y: , file: "_map.png" },
+{ name: "日本", x: 86, y: 31, file: "japan_map.png" },
+];
+
+function nextQuestion() {
+err.innerText = ""; // エラーを消す
+current = countries[Math.floor(Math.random() * countries.length)];
+m.src = current.file; // 画像をセット
+s = 0.8;
+b.value = "";
+tText.innerText = "ターゲットを破壊せよ！！";
+update();
+}
+
+function update() {
+if(!current) return;
+m.style.transformOrigin = current.x + "% " + current.y + "%";
+m.style.transform = "translate(-" + current.x + "%, -" + current.y + "%) scale(" + s + ")";
+}
+
+nextQuestion();
+
+setInterval(function() {
+s = s + 0.004;
+update();
+if (s > 7) {
+alert("防衛失敗！正解は「" + current.name + "」");
+nextQuestion();
+}
+}, 20);
+
+b.onkeypress = function(e) {
+if (e.keyCode === 13) {
+if (b.value === current.name) {
+alert("撃破成功！");
+nextQuestion();
+} else {
+b.value = "";
+}
+}
+};
+</script>
+
+</body>
+</html>
