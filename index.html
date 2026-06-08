@@ -29,26 +29,26 @@ var err = document.getElementById('error-msg');
 var s = 0.8;
 var current;
 var countries = [
-{ name: "アイスランド", x: 40, y: 14, file: "iceland_map.png" },
-{ name: "アイルランド", x: 43, y: 22, file: "ireland_map.png" },
+{ name: "アイスランド", x: 40, y: 14, file: "iceland_map.png" },/*画像生成済み*/
+{ name: "アイルランド", x: 43, y: 22, file: "ireland_map.png" },/*画像生成済み*/
 { name: "アゼルバイジャン", x: 59, y: 33, file: "azerbaijan_map.png" },/*画像生成済み*/
 { name: "アフガニスタン", x: 67, y: 35, file: "afghanistan_map.png" },/*画像生成済み*/
 { name: "アメリカ合衆国", x: 20, y: 38, file: "united_states_map.png" },
-{ name: "アラブ首長国連邦", x: 63, y: 46, file: "united_arab_emirates_map.png" },
+{ name: "アラブ首長国連邦", x: 63, y: 46, file: "united_arab_emirates_map.png" },/*画像生成済み*/
 { name: "アルジェリア", x: 46, y: 45, file: "algeria_map.png" },/*画像生成済み*/
 { name: "アルゼンチン", x: 26, y: 83, file: "algentina_map.png" },/*画像生成済み*/
 { name: "アルバニア", x: 51, y: 26, file: "albania_map.png" },/*画像生成済み*/
 { name: "アルメニア", x: 58, y: 28, file: "armenia_map.png" },/*画像生成済み*/
 { name: "アンゴラ", x: 50, y: 65, file: "angola_map.png" },/*画像生成済み*/
-{ name: "イエメン", x: 60, y: 51, file: "yemen_map.png" },
+{ name: "イエメン", x: 60, y: 51, file: "yemen_map.png" },/*画像生成済み*/
 { name: "イギリス", x: 44, y: 21, file: "united_kingdom_map.png" },
-{ name: "イタリア", x: 49, y: 27, file: "italy_map.png" },
-{ name: "イラク", x: 58, y: 38, file: "iraq_map.png" },
-{ name: "イラン", x: 61, y: 38, file: "iran_map.png" },
-{ name: "インド", x: 70, y: 45, file: "india_map.png" },
-{ name: "インドネシア", x: 83, y: 62, file: "indonesia_map.png" },
-{ name: "ウガンダ", x: 55, y: 56, file: "uganda_map.png" },
-{ name: "ウクライナ", x: 54, y: 25, file: "ukraine_map.png" },
+{ name: "イタリア", x: 49, y: 27, file: "italy_map.png" },/*画像生成済み*/
+{ name: "イラク", x: 58, y: 38, file: "iraq_map.png" },/*画像生成済み*/
+{ name: "イラン", x: 61, y: 38, file: "iran_map.png" },/*画像生成済み*/
+{ name: "インド", x: 70, y: 45, file: "india_map.png" },/*画像生成済み*/
+{ name: "インドネシア", x: 83, y: 62, file: "indonesia_map.png" },/*画像生成済み*/
+{ name: "ウガンダ", x: 55, y: 56, file: "uganda_map.png" },/*画像生成済み*/
+{ name: "ウクライナ", x: 54, y: 25, file: "ukraine_map.png" },/*画像生成済み*/
 { name: "ウズベキスタン", x: 64, y: 31, file: "uzbekistan_map.png" },
 { name: "ウルグアイ", x: 28, y: 80, file: "uruguay_map.png" },
 { name: "エクアドル", x: 20, y: 58, file: "ecuador_map.png" },/*画像生成済み*/
@@ -66,10 +66,11 @@ var countries = [
 { name: "カナダ", x: 19, y: 22, file: "canada_map.png" },
 { name: "カメルーン", x: 49, y: 54, file: "cameroon_map.png" },/*画像生成済み*/
 { name: "韓国", x: 83, y: 33, file: "south_korea_map.png" },
+{ name: "ガーナ", x: 45, y: 51, file: "ghana_map.png" },
 { name: "ガンビア", x: 40, y: 49, file: "gambia_map.png" },
 { name: "カンボジア", x: 78, y: 49, file: "cambodia_map.png" },/*画像生成済み*/
 { name: "ガイアナ", x: 26, y: 52, file: "guyana_map.png" },
-{ name: "ガボン", x: 48, y: 56, file: "gabon_map.png" },
+{ name: "ガボン", x: 48, y: 56, file: "gabon_map.png" },/*画像生成済み*/
 { name: "北マケドニア", x: 51, y: 26, file: "north_macedonia_map.png" },
 { name: "ギニア", x: 40, y: 51, file: "guinea_map.png" },
 { name: "ギニアビサウ", x: 39, y: 51, file: "guinea_bissau_map.png" },
@@ -89,7 +90,7 @@ var countries = [
 { name: "ザンビア", x: 52, y: 67, file: "zambia_map.png" },
 { name: "シエラレオネ", x: 40, y: 52, file: "sierra_leone_map.png" },
 { name: "ジャマイカ", x: 20, y: 46, file: "jamaica_map.png" },
-{ name: "ジョージア", x: 56, y: 31, file: "georgia_map.png" },
+{ name: "ジョージア", x: 56, y: 31, file: "georgia_map.png" },/*画像生成済み*/
 { name: "シリア", x: 56, y: 37, file: "syria_map.png" },
 { name: "ジンバブエ", x: 53, y: 70, file: "zimbabwe_map.png" },
 { name: "スイス", x: 48, y: 24, file: "switzerland_map.png" },
@@ -114,7 +115,7 @@ var countries = [
 { name: "チュニジア", x: 48, y: 36, file: "tunisia_map.png" },
 { name: "チリ", x: 23, y: 79, file: "chile_map.png" },
 { name: "デンマーク", x: 48, y: 20, file: "denmark_map.png" },
-{ name: "ドイツ", x: 48, y: 22, file: "germany_map.png" },
+{ name: "ドイツ", x: 48, y: 22, file: "germany_map.png" },/*画像生成済み*/
 { name: "トーゴ", x: 46, y: 51, file: "togo_map.png" },
 { name: "ドミニカ共和国", x: 23, y: 45, file: "dominican_republic_map.png" },/*画像生成済み*/
 { name: "トリニダード・トバゴ", x: 24, y: 51, file: "trinidad_and_tobago_map.png" },
@@ -124,7 +125,7 @@ var countries = [
 { name: "ナミビア", x: 49, y: 72, file: "namibia_map.png" },
 { name: "ニカラグア", x: 18, y: 48, file: "nicaragua_map.png" },
 { name: "ニジェール", x: 47, y: 45, file: "niger_map.png" },
-{ name: "日本", x: 87, y: 33, file: "japan_map.png" },
+{ name: "日本", x: 87, y: 33, file: "japan_map.png" },/*画像生成済み*/
 { name: "ニュージーランド", x: 92, y: 84, file: "new_zealand_map.png" },
 { name: "ネパール", x: 71, y: 40, file: "nepal_map.png" },
 { name: "ノルウェー", x: 49, y: 15, file: "norway_map.png" },
@@ -139,7 +140,7 @@ var countries = [
 { name: "東ティモール", x: 83, y: 62, file: "east_timor_map.png" },
 { name: "フィジー", x: 95, y: 67, file: "fiji_map.png" },
 { name: "フィリピン", x: 82, y: 47, file: "philippines_map.png" },
-{ name: "フィンランド", x: 51, y: 15, file: "finland_map.png" },
+{ name: "フィンランド", x: 51, y: 15, file: "finland_map.png" },/*画像生成済み*/
 { name: "ブータン", x: 73, y: 40, file: "bhutan_map.png" },/*画像生成済み*/
 { name: "ブラジル", x: 29, y: 64, file: "brazil_map.png" },/*画像生成済み*/
 { name: "フランス", x: 46, y: 26, file: "france_map.png" },
